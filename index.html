@@ -7,23 +7,29 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&family=Instrument+Serif:ital@1&display=swap');
         :root { --brand-teal: #00cbcb; --brand-red: #ff4444; --bg-dark: #080808; }
-        body { background: var(--bg-dark); color: white; font-family: 'Space Grotesk', sans-serif; overflow: hidden; }
+        body { background: var(--bg-dark); color: white; font-family: 'Space Grotesk', sans-serif; }
         .serif-italic { font-family: 'Instrument Serif', serif; font-style: italic; }
         
-        canvas {
+        /* The container for the sphere */
+        .sphere-wrap {
+            position: relative; width: 360px; height: 360px;
             border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.15);
             background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.9);
-            cursor: pointer;
+            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0,0,0,0.5);
+            overflow: hidden;
+            z-index: 5;
         }
 
+        canvas { display: block; width: 100%; height: 100%; }
+
         .city-btn {
-            width: 100%; text-align: left; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05);
-            font-size: 10px; letter-spacing: 0.1em; opacity: 0.5; transition: 0.3s;
+            width: 100%; text-align: left; padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 10px; letter-spacing: 0.1em; transition: 0.3s; cursor: pointer;
+            position: relative; z-index: 50; /* Ensure buttons are clickable */
         }
-        .city-btn:hover { opacity: 1; color: var(--brand-teal); }
-        .active-city { opacity: 1; border-left: 2px solid white; background: rgba(255,255,255,0.05); }
+        .city-btn:hover { background: rgba(255,255,255,0.08); color: var(--brand-teal); }
+        .active-city { border-left: 3px solid var(--brand-teal); background: rgba(255,255,255,0.05); color: var(--brand-teal); }
         .header-caps { text-transform: uppercase; letter-spacing: -0.04em; line-height: 0.85; }
     </style>
 </head>
@@ -31,25 +37,24 @@
 
     <div class="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
         
-        <div class="lg:col-span-3 border-r border-white/10 pr-8">
-            <h3 class="text-[10px] uppercase tracking-widest opacity-40 mb-6 font-bold italic">Da Vinci Physics Engine</h3>
+        <div class="lg:col-span-3 border-r border-white/10 pr-8 z-50">
+            <h3 class="text-[10px] uppercase tracking-widest opacity-40 mb-6 font-bold">Taligence Physics Engine</h3>
             <div id="cityList" class="space-y-1">
-                <p class="text-[9px] opacity-30 mb-2 uppercase">The 60% Equilibrium</p>
-                <button onclick="updateData(61, 'NEW YORK', false)" class="city-btn active-city">NEW YORK</button>
-                <button onclick="updateData(64, 'BOSTON', false)" class="city-btn">BOSTON</button>
-                <button onclick="updateData(61, 'DALLAS', false)" class="city-btn">DALLAS</button>
-                
-                <p class="text-[9px] opacity-30 mt-6 mb-2 uppercase text-red-500">The Red Zones</p>
-                <button onclick="updateData(48, 'MOUNTAIN VIEW', true)" class="city-btn hover:text-red-500">MOUNTAIN VIEW</button>
-                <button onclick="updateData(51, 'BEVERLY HILLS', true)" class="city-btn hover:text-red-500">BEVERLY HILLS</button>
+                <button onclick="updateSupply(61, 'NEW YORK', false)" class="city-btn active-city">NEW YORK</button>
+                <button onclick="updateSupply(64, 'BOSTON', false)" class="city-btn">BOSTON</button>
+                <button onclick="updateSupply(61, 'DALLAS', false)" class="city-btn">DALLAS</button>
+                <button onclick="updateSupply(48, 'MOUNTAIN VIEW', true)" class="city-btn">MOUNTAIN VIEW (RED)</button>
+                <button onclick="updateSupply(51, 'BEVERLY HILLS', true)" class="city-btn">BEVERLY HILLS (RED)</button>
             </div>
         </div>
 
         <div class="lg:col-span-5 flex flex-col items-center relative">
-            <canvas id="fluidCanvas" width="360" height="360"></canvas>
-            <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                <span class="text-8xl font-bold tracking-tighter" id="pct">61%</span>
-                <span class="text-[10px] uppercase tracking-[0.4em] opacity-40 mt-4 font-bold" id="cityLabel">NEW YORK</span>
+            <div class="sphere-wrap" id="sphere">
+                <canvas id="fluidCanvas"></canvas>
+                <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-20">
+                    <span class="text-8xl font-bold tracking-tighter" id="pctText">61%</span>
+                    <span class="text-[10px] uppercase tracking-[0.4em] opacity-40 mt-4 font-bold" id="cityLabel">NEW YORK</span>
+                </div>
             </div>
         </div>
 
@@ -58,12 +63,14 @@
                 KINETIC <br><span id="titleColor" class="text-[--brand-teal]">SUPPLY.</span>
             </h1>
             <p class="text-lg text-gray-400">
-                Data is never static. We've animated the talent pool as a <span class="serif-italic text-white">living fluid</span> to reflect the constant churn and slosh of the 2026 market.
+                The Marketing Talent Pool in the US is <span class="serif-italic text-white">Structurally Female</span>. 
             </p>
 
-            <div class="space-y-4 border-t border-white/10 pt-8 text-[9px] uppercase tracking-widest opacity-20">
-                Benchmarked Intelligence: McK / Taligence <br>
-                Render Mode: Procedural Physics
+            <div class="pt-8 border-t border-white/10 space-y-4">
+                <div class="text-[9px] uppercase tracking-widest opacity-40">
+                    Benchmark: McK/LI Broken Rung (93:100) <br>
+                    Source: Taligence proprietary Intelligence (2026)
+                </div>
             </div>
         </div>
     </div>
@@ -71,38 +78,72 @@
     <script>
         const canvas = document.getElementById('fluidCanvas');
         const ctx = canvas.getContext('2d');
-        let width = canvas.width;
-        let height = canvas.height;
+        const sphere = document.getElementById('sphere');
 
-        let targetPercent = 0.61;
-        let currentPercent = 0.61;
+        // Match canvas resolution to display size
+        canvas.width = 360;
+        canvas.height = 360;
+
+        let targetLvl = 0.61;
+        let currentLvl = 0.61;
         let color = '#00cbcb';
-        let points = [];
-        let totalPoints = 40;
-        let gap = width / (totalPoints - 1);
-
-        // Initialize points
-        for (let i = 0; i < totalPoints; i++) {
-            points.push({ x: i * gap, y: height, py: height, vy: 0 });
+        
+        // Physics Array
+        let springs = [];
+        const springCount = 50;
+        for (let i = 0; i <= springCount; i++) {
+            springs.push({ x: (360 / springCount) * i, y: 360, v: 0 });
         }
 
-        function updateData(val, name, isRed) {
-            targetPercent = val / 100;
-            document.getElementById('pct').innerText = val + '%';
-            document.getElementById('cityLabel').innerText = name;
+        window.updateSupply = function(val, name, isRed) {
+            targetLvl = val / 100;
             color = isRed ? '#ff4444' : '#00cbcb';
+            document.getElementById('pctText').innerText = val + '%';
+            document.getElementById('cityLabel').innerText = name;
             document.getElementById('titleColor').style.color = color;
-            
-            // Add a "splash" when changing
-            points[Math.floor(Math.random() * totalPoints)].vy = -20;
-            
+            document.getElementById('titleColor').innerText = isRed ? "TENSION." : "SUPPLY.";
+
+            // Create a splash
+            springs[Math.floor(Math.random() * springCount)].v = -15;
+
+            // Update UI
             const btns = document.querySelectorAll('.city-btn');
             btns.forEach(b => b.classList.remove('active-city'));
-            event.target.classList.add('active-city');
+            event.currentTarget.classList.add('active-city');
         }
 
-        function animate() {
-            ctx.clearRect(0, 0, width, height);
+        function render() {
+            ctx.clearRect(0, 0, 360, 360);
             
-            // Smoothly move towards target level
-            currentPercent += (targetPercent - currentPercent
+            // Level logic
+            currentLvl += (targetLvl - currentLvl) * 0.05;
+            const baseY = 360 - (360 * currentLvl);
+
+            ctx.beginPath();
+            ctx.moveTo(0, 360);
+
+            // Update springs
+            for (let i = 0; i <= springCount; i++) {
+                const s = springs[i];
+                const accel = -0.03 * (s.y - baseY) - 0.08 * s.v;
+                s.v += accel;
+                s.y += s.v;
+            }
+
+            // Wave spread
+            const passes = 8;
+            for (let p = 0; p < passes; p++) {
+                for (let i = 0; i <= springCount; i++) {
+                    if (i > 0) {
+                        const leftDelta = 0.02 * (springs[i].y - springs[i - 1].y);
+                        springs[i - 1].v += leftDelta;
+                    }
+                    if (i < springCount) {
+                        const rightDelta = 0.02 * (springs[i].y - springs[i + 1].y);
+                        springs[i + 1].v += rightDelta;
+                    }
+                }
+            }
+
+            // Draw line
+            ctx.lineTo(springs[0].x, springs[0].
