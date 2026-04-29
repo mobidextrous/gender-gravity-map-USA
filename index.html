@@ -5,155 +5,208 @@
     <title>National Supply Map | CMO Ladder</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&display=swap');
-        :root { --teal: #00cbcb; --red: #ff4444; --bg: #050505; }
-        body { background: var(--bg); color: white; font-family: 'Space Grotesk', sans-serif; overflow: hidden; }
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;900&display=swap');
         
-        .bento-box {
+        :root { 
+            --teal: #00cbcb; 
+            --red: #ff4444; 
+            --bg: #050505; 
+        }
+
+        body { 
+            background: var(--bg); 
+            color: white; 
+            font-family: 'Space Grotesk', sans-serif; 
+            overflow: hidden; 
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .bento-stage {
             background: rgba(255,255,255,0.02);
             border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 2rem;
+            border-radius: 3rem;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            box-shadow: 0 50px 100px rgba(0,0,0,0.9);
+            width: 100%;
+            max-width: 900px;
+            aspect-ratio: 16/9;
         }
 
+        /* The big city text that reacts to the water */
+        .kinetic-city {
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -0.06em;
+            line-height: 0.75;
+            mix-blend-difference: difference; /* This makes it turn white over teal/red */
+            color: white;
+            z-index: 20;
+            pointer-events: none;
+        }
+
+        /* Custom Slider Styling */
         input[type=range] {
-            -webkit-appearance: none; width: 100%; background: transparent;
+            -webkit-appearance: none; 
+            width: 100%; 
+            background: transparent;
         }
         input[type=range]::-webkit-slider-runnable-track {
-            width: 100%; height: 2px; cursor: pointer; background: rgba(255,255,255,0.2);
+            width: 100%; height: 4px; cursor: pointer; background: rgba(255,255,255,0.1);
+            border-radius: 2px;
         }
         input[type=range]::-webkit-slider-thumb {
-            height: 20px; width: 20px; border-radius: 50%; background: var(--teal);
-            cursor: pointer; -webkit-appearance: none; margin-top: -9px;
-            box-shadow: 0 0 15px var(--teal);
+            height: 24px; width: 24px; border-radius: 50%; background: var(--teal);
+            cursor: pointer; -webkit-appearance: none; margin-top: -10px;
+            box-shadow: 0 0 20px var(--teal);
+            transition: transform 0.2s;
         }
+        input[type=range]:active::-webkit-slider-thumb { transform: scale(1.4); }
 
-        .kinetic-text { font-weight: 900; text-transform: uppercase; letter-spacing: -0.05em; line-height: 0.8; }
+        .glass-ui {
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 99px;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+        }
     </style>
 </head>
-<body class="h-screen flex flex-col items-center justify-center p-6">
+<body class="p-6">
 
-    <div class="max-w-4xl w-full space-y-12">
-        <div class="flex justify-between items-end">
-            <div>
-                <h1 class="text-xs uppercase tracking-widest opacity-40">Taligence National Supply Monitor</h1>
-                <p class="text-3xl font-bold mt-2">COAST TO COAST <span class="text-[--teal]">EQUILIBRIUM</span></p>
+    <div class="w-full max-w-5xl space-y-12">
+        
+        <div class="flex justify-between items-end px-4">
+            <div class="space-y-2">
+                <div class="glass-ui inline-block">Taligence Intelligence Report 2026</div>
+                <h2 class="text-4xl font-black uppercase tracking-tighter">US <span class="text-[--teal]">Supply</span> Axis</h2>
             </div>
             <div class="text-right">
-                <span id="regionLabel" class="text-xs uppercase tracking-widest text-[--teal]">East Coast</span>
+                <div id="region" class="text-xs font-bold tracking-widest text-[--teal] transition-colors duration-500">EAST COAST</div>
             </div>
         </div>
 
-        <div class="bento-box aspect-video flex items-center justify-center">
-            <canvas id="bentoCanvas" class="absolute inset-0 w-full h-full"></canvas>
+        <div class="bento-stage flex items-center justify-center">
+            <canvas id="physicsCanvas" class="absolute inset-0"></canvas>
             
-            <div class="relative z-10 flex flex-col items-center text-center pointer-events-none">
-                <div id="cityName" class="kinetic-text text-8xl md:text-9xl mix-blend-difference">NEW YORK</div>
-                <div class="mt-4 flex items-baseline gap-2">
-                    <span id="pctValue" class="text-5xl font-light">61</span>
-                    <span class="text-xl opacity-50">% FEMALE</span>
+            <div class="relative z-30 flex flex-col items-center">
+                <div id="cityName" class="kinetic-city text-[10vw] md:text-[120px] text-center">NEW YORK</div>
+                <div class="flex items-baseline gap-3 mt-4">
+                    <span id="pctVal" class="text-6xl font-light">61</span>
+                    <span class="text-xl font-bold opacity-40 uppercase tracking-widest">% Female Share</span>
                 </div>
             </div>
         </div>
 
-        <div class="space-y-4">
+        <div class="px-4 space-y-6">
             <input type="range" id="geoSlider" min="0" max="9" value="9" step="1">
-            <div class="flex justify-between text-[10px] uppercase tracking-widest opacity-30 font-bold">
-                <span>West Coast (Long -122°)</span>
-                <span>Central</span>
-                <span>East Coast (Long -74°)</span>
+            <div class="flex justify-between text-[10px] uppercase font-bold tracking-[0.3em] opacity-30">
+                <span>West Coast</span>
+                <span>The Red Zones</span>
+                <span>East Coast</span>
             </div>
         </div>
 
-        <div class="text-[9px] opacity-20 text-center italic">
-            Proprietary Intelligence: Data is live-rendered based on 80,000 active US marketing posts.
+        <div class="text-center text-[10px] opacity-20 uppercase tracking-[0.5em] pt-4">
+            Confidential Proprietary Data — CMO Ladder Members Only
         </div>
     </div>
 
     <script>
         const cities = [
-            { name: "SEATTLE", val: 59, reg: "West Coast" },
-            { name: "SAN FRANCISCO", val: 59, reg: "West Coast" },
-            { name: "MOUNTAIN VIEW", val: 48, reg: "Silicon Valley" },
-            { name: "LOS ANGELES", val: 57, reg: "West Coast" },
-            { name: "SALT LAKE CITY", val: 55, reg: "Mountain" },
-            { name: "AUSTIN", val: 59, reg: "Central" },
-            { name: "DALLAS", val: 61, reg: "Central" },
-            { name: "CHICAGO", val: 60, reg: "Midwest" },
-            { name: "ATLANTA", val: 59, reg: "South" },
-            { name: "NEW YORK", val: 61, reg: "East Coast" }
+            { name: "Seattle", val: 59, reg: "Pacific North" },
+            { name: "San Fran", val: 59, reg: "West Coast" },
+            { name: "Mt View", val: 48, reg: "Silicon Valley (Red)" },
+            { name: "Los Angeles", val: 57, reg: "West Coast" },
+            { name: "Salt Lake", val: 55, reg: "The Mountain" },
+            { name: "Austin", val: 59, reg: "Central South" },
+            { name: "Dallas", val: 61, reg: "Central South" },
+            { name: "Chicago", val: 60, reg: "Midwest" },
+            { name: "Boston", val: 64, reg: "New England" },
+            { name: "New York", val: 61, reg: "East Coast" }
         ];
 
-        const canvas = document.getElementById('bentoCanvas');
+        const canvas = document.getElementById('physicsCanvas');
         const ctx = canvas.getContext('2d');
         const slider = document.getElementById('geoSlider');
         
         let width, height;
-        let points = [];
-        const totalPoints = 35;
-        let targetLvl = 0.61;
-        let currentLvl = 0.61;
+        let springs = [];
+        const springCount = 40;
+        let targetY = 0;
+        let currentY = 0;
         let color = '#00cbcb';
 
-        function initCanvas() {
+        function init() {
             width = canvas.parentElement.offsetWidth;
             height = canvas.parentElement.offsetHeight;
             canvas.width = width;
             canvas.height = height;
-            points = [];
-            for (let i = 0; i <= totalPoints; i++) {
-                points.push({ x: (width / totalPoints) * i, y: height, v: 0 });
+            springs = [];
+            for (let i = 0; i <= springCount; i++) {
+                springs.push({ x: (width / springCount) * i, y: height, v: 0 });
             }
+            targetY = height * (1 - 0.61);
+            currentY = targetY;
         }
 
         slider.oninput = function() {
             const data = cities[this.value];
             document.getElementById('cityName').innerText = data.name;
-            document.getElementById('pctValue').innerText = data.val;
-            document.getElementById('regionLabel').innerText = data.reg;
+            document.getElementById('pctVal').innerText = data.val;
+            document.getElementById('region').innerText = data.reg;
             
-            targetLvl = data.val / 100;
+            targetY = height * (1 - (data.val / 100));
             color = data.val < 55 ? '#ff4444' : '#00cbcb';
-            document.getElementById('regionLabel').style.color = color;
+            document.getElementById('region').style.color = color;
 
-            // Fucking Mad Splash
-            points.forEach(p => p.v = (Math.random() - 0.5) * 40);
+            // Fucking Mad Physics: Add random turbulence on change
+            springs.forEach(s => s.v += (Math.random() - 0.5) * 60);
         };
 
-        function animate() {
+        function draw() {
             ctx.clearRect(0, 0, width, height);
-            currentLvl += (targetLvl - currentLvl) * 0.08;
-            const baseY = height - (height * currentLvl);
+            
+            // Move overall level
+            currentY += (targetY - currentY) * 0.1;
 
             ctx.beginPath();
             ctx.moveTo(0, height);
 
-            for (let i = 0; i <= totalPoints; i++) {
-                const p = points[i];
-                const accel = -0.05 * (p.y - baseY) - 0.1 * p.v;
-                p.v += accel;
-                p.y += p.v;
+            // Update individual spring points
+            for (let i = 0; i <= springCount; i++) {
+                const s = springs[i];
+                const accel = -0.04 * (s.y - currentY) - 0.06 * s.v;
+                s.v += accel;
+                s.y += s.v;
 
+                // Propagate wave to neighbors
                 if (i > 0) {
-                    const d = 0.05 * (p.y - points[i-1].y);
-                    points[i-1].v += d;
-                    p.v -= d;
+                    const diff = 0.04 * (s.y - springs[i-1].y);
+                    springs[i-1].v += diff;
+                    s.v -= diff;
                 }
-                ctx.lineTo(p.x, p.y);
+                
+                ctx.lineTo(s.x, s.y);
             }
 
             ctx.lineTo(width, height);
             ctx.fillStyle = color;
-            ctx.globalAlpha = 0.6;
+            ctx.globalAlpha = 0.8;
             ctx.fill();
-            requestAnimationFrame(animate);
+
+            requestAnimationFrame(draw);
         }
 
-        window.addEventListener('resize', initCanvas);
-        initCanvas();
-        animate();
+        window.addEventListener('resize', init);
+        init();
+        draw();
     </script>
 </body>
 </html>
