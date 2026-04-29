@@ -2,155 +2,119 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Supply Intelligence | CMO Ladder</title>
+    <title>Market Tension | CMO Ladder</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&family=Instrument+Serif:ital@1&display=swap');
-        
-        :root {
-            --brand-teal: #00cbcb;
-            --brand-orange: #ff5f1f;
-            --bg-dark: #080808;
-        }
-
-        body { 
-            background: var(--bg-dark); 
-            color: white; 
-            font-family: 'Space Grotesk', sans-serif;
-            -webkit-font-smoothing: antialiased;
-        }
-
+        :root { --brand-teal: #00cbcb; --brand-red: #ff4444; --bg-dark: #080808; }
+        body { background: var(--bg-dark); color: white; font-family: 'Space Grotesk', sans-serif; }
         .serif-italic { font-family: 'Instrument Serif', serif; font-style: italic; }
-
+        
         .glass-sphere {
-            position: relative;
-            width: 340px;
-            height: 340px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.8);
-            overflow: hidden;
-            backdrop-filter: blur(8px);
+            position: relative; width: 340px; height: 340px; border-radius: 50%;
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.8); overflow: hidden; backdrop-filter: blur(8px);
         }
-
         .liquid-fill {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 60.2%;
-            background: linear-gradient(180deg, var(--brand-teal) 0%, #005555 100%);
-            transition: height 1.8s cubic-bezier(0.65, 0, 0.35, 1);
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 61%;
+            background: var(--brand-teal); transition: all 1.2s cubic-bezier(0.65, 0, 0.35, 1);
         }
-
-        .wave {
-            position: absolute;
-            top: -15px;
-            left: 0;
-            width: 200%;
-            height: 30px;
-            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 20" xmlns="http://www.w3.org/2000/svg"><path d="M0 10 Q 25 20 50 10 T 100 10 V 20 H 0 Z" fill="%2300cbcb"/></svg>');
-            background-size: 50% 100%;
-            animation: flow 3s linear infinite;
+        .red-state { background: linear-gradient(180deg, #ff4444 0%, #660000 100%) !important; }
+        
+        .city-btn {
+            width: 100%; text-align: left; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 10px; letter-spacing: 0.1em; opacity: 0.5; transition: 0.3s;
         }
-
-        @keyframes flow {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-
-        .accent-dot {
-            position: absolute;
-            top: 15%;
-            right: 8%;
-            width: 14px;
-            height: 14px;
-            background: var(--brand-orange);
-            border-radius: 50%;
-            box-shadow: 0 0 20px var(--brand-orange);
-            z-index: 20;
-        }
-
-        .header-caps {
-            text-transform: uppercase;
-            letter-spacing: -0.04em;
-            line-height: 0.85;
-        }
-
-        .sub-label {
-            color: rgba(255, 255, 255, 0.7); /* Brightened for readability */
-            font-size: 11px;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-        }
-
-        .credit-line {
-            color: rgba(255, 255, 255, 0.15); /* Quietly credited */
-            font-size: 9px;
-            letter-spacing: 0.05em;
-        }
+        .city-btn:hover { opacity: 1; color: var(--brand-teal); }
+        .active-city { opacity: 1; border-left: 2px solid white; background: rgba(255,255,255,0.05); }
+        .danger-text { color: var(--brand-red) !important; }
     </style>
 </head>
-<body class="flex flex-col items-center justify-center min-h-screen p-6">
+<body class="flex items-center justify-center min-h-screen p-6">
 
-    <div class="max-w-5xl w-full grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+    <div class="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
         
-        <div class="flex flex-col items-center relative">
-            <div class="accent-dot"></div>
-            <div class="glass-sphere mb-8">
-                <div class="liquid-fill" id="liquid">
-                    <div class="wave"></div>
-                </div>
-                <div class="absolute inset-0 flex flex-col items-center justify-center z-10">
-                    <span class="text-7xl font-bold tracking-tighter" id="percentText">60.2%</span>
-                </div>
+        <div class="lg:col-span-3 border-r border-white/10 pr-8">
+            <h3 class="text-[10px] uppercase tracking-widest opacity-40 mb-6 font-bold">Market Archetypes</h3>
+            <div id="cityList" class="space-y-1">
+                <p class="text-[9px] opacity-30 mb-2 uppercase">The 60% Equilibrium</p>
+                <button onclick="update(61, 'NEW YORK', false)" class="city-btn active-city">NEW YORK</button>
+                <button onclick="update(61, 'DALLAS', false)" class="city-btn">DALLAS</button>
+                <button onclick="update(64, 'BOSTON', false)" class="city-btn">BOSTON</button>
+                
+                <p class="text-[9px] opacity-30 mt-6 mb-2 uppercase text-red-500">The Red Zones (Male Tilt)</p>
+                <button onclick="update(48, 'MOUNTAIN VIEW', true)" class="city-btn hover:text-red-500">MOUNTAIN VIEW (48%)</button>
+                <button onclick="update(51, 'BEVERLY HILLS', true)" class="city-btn hover:text-red-500">BEVERLY HILLS (51%)</button>
+                <button onclick="update(54, 'SAN JOSE', true)" class="city-btn hover:text-red-500">SAN JOSE (54%)</button>
             </div>
-            <div class="sub-label font-bold text-center">Avg. across top 50 US Marketing Hubs</div>
         </div>
 
-        <div class="space-y-10">
-            <div class="space-y-6">
-                <h1 class="text-6xl font-bold header-caps text-white">
-                    THE MARKETING <br>TALENT POOL IN <br>THE US IS <br>
-                    <span class="text-[--brand-teal]">STRUCTURALLY <br>FEMALE.</span>
-                </h1>
-                <p class="text-xl text-gray-400 max-w-md">
-                    Taligence intelligence reveals a market equilibrium where <span class="serif-italic text-white">Supply is not the problem</span>—friction within the hierarchy is.
+        <div class="lg:col-span-5 flex flex-col items-center">
+            <div class="glass-sphere mb-8">
+                <div class="liquid-fill" id="liquid"></div>
+                <div class="absolute inset-0 flex flex-col items-center justify-center z-10">
+                    <span class="text-8xl font-bold tracking-tighter" id="pct">61%</span>
+                    <span class="text-[10px] uppercase tracking-[0.4em] opacity-40 mt-4 font-bold" id="cityLabel">NEW YORK</span>
+                </div>
+            </div>
+            <div class="text-[11px] font-bold opacity-70 tracking-widest uppercase" id="statusLabel">Structural Majority</div>
+        </div>
+
+        <div class="lg:col-span-4 space-y-10">
+            <h1 class="text-6xl font-bold uppercase tracking-tighter leading-[0.85]">
+                BEYOND <br>THE <span id="titleColor" class="text-[--brand-teal]">TEAL.</span>
+            </h1>
+            <p class="text-lg text-gray-400">
+                While marketing is structurally female, <span class="serif-italic text-white">Red Zone</span> markets reveal where the technical or industrial "gravity" of a city overrides the functional norm.
+            </p>
+
+            <div class="space-y-4 border-t border-white/10 pt-8">
+                <div class="flex justify-between items-center">
+                    <span class="text-[10px] uppercase opacity-40">Mck Broken Rung</span>
+                    <span class="font-bold">93:100</span>
+                </div>
+                <p id="insightText" class="text-xs text-gray-500 italic">
+                    "Standard markets reflect the national female majority."
                 </p>
             </div>
-
-            <div class="grid grid-cols-2 gap-8 border-t border-white/10 pt-8">
-                <div>
-                    <span class="block text-[--brand-orange] font-bold text-3xl">+3.4%</span>
-                    <span class="text-[10px] uppercase tracking-widest opacity-40">Growth Outlier (Tempe)</span>
-                </div>
-                <div>
-                    <span class="block text-white font-bold text-3xl">93:100</span>
-                    <span class="text-[10px] uppercase tracking-widest opacity-40">The "Broken Rung" Gap</span>
-                </div>
-            </div>
-
-            <div class="flex gap-3">
-                <button onclick="updateData(61.0)" class="px-6 py-2 border border-white/20 text-[10px] uppercase tracking-widest hover:bg-white hover:text-black transition-all">NYC</button>
-                <button onclick="updateData(57.0)" class="px-6 py-2 border border-white/20 text-[10px] uppercase tracking-widest hover:bg-white hover:text-black transition-all">LA</button>
-                <button onclick="updateData(60.2)" class="px-6 py-2 border border-[--brand-teal] text-[--brand-teal] text-[10px] uppercase tracking-widest">Global</button>
-            </div>
             
-            <div class="credit-line pt-4 italic">
-                Sources: Taligence Proprietary Data (2024-2026); Benchmarked against McK/LI Women in the Workplace.
+            <div class="text-[9px] uppercase tracking-widest opacity-20">
+                Taligence Intelligence Report 2026
             </div>
         </div>
     </div>
 
     <script>
-        function updateData(val) {
-            const liquid = document.getElementById('liquid');
-            const text = document.getElementById('percentText');
-            liquid.style.height = val + '%';
-            text.innerText = val + '%';
+        function update(val, name, isRed) {
+            const liq = document.getElementById('liquid');
+            const pct = document.getElementById('pct');
+            const lbl = document.getElementById('cityLabel');
+            const title = document.getElementById('titleColor');
+            const stat = document.getElementById('statusLabel');
+            const ins = document.getElementById('insightText');
+
+            liq.style.height = val + '%';
+            pct.innerText = val + '%';
+            lbl.innerText = name;
+
+            if(isRed) {
+                liq.classList.add('red-state');
+                title.classList.add('danger-text');
+                title.innerText = "RED.";
+                stat.innerText = "Male Tilt / Tech Bleed";
+                ins.innerText = '"' + name + ' represents a departure from the 60% norm, where technical or legacy industry demographics override functional trends."';
+            } else {
+                liq.classList.remove('red-state');
+                title.classList.remove('danger-text');
+                title.innerText = "TEAL.";
+                stat.innerText = "Structural Majority";
+                ins.innerText = '"Standard high-volume hubs continue to reflect the structural female majority."';
+            }
+            
+            const btns = document.querySelectorAll('.city-btn');
+            btns.forEach(b => b.classList.remove('active-city'));
+            event.target.classList.add('active-city');
         }
     </script>
-
 </body>
 </html>
