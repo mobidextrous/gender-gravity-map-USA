@@ -12,12 +12,12 @@
         .bento-stage {
             background: rgba(255,255,255,0.02);
             border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 3rem;
+            border-radius: 2.5rem;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 50px 100px rgba(0,0,0,0.9);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.9);
             width: 100%;
-            max-width: 1000px;
+            max-width: 900px;
             aspect-ratio: 16/9;
         }
 
@@ -26,34 +26,29 @@
             mix-blend-difference: difference; color: white; z-index: 20; pointer-events: none;
         }
 
-        /* The "Instruction" Tooltip */
+        /* Instructions */
         .instruction-tag {
-            position: absolute; top: -45px; left: 0;
+            position: absolute; top: -40px; left: 0;
             background: var(--teal); color: black;
-            padding: 4px 12px; border-radius: 4px;
+            padding: 3px 10px; border-radius: 4px;
             font-size: 10px; font-weight: 900; white-space: nowrap;
-            pointer-events: none; transition: opacity 0.5s;
-        }
-        .instruction-tag::after {
-            content: ''; position: absolute; bottom: -5px; left: 50%;
-            transform: translateX(-50%); border-left: 5px solid transparent;
-            border-right: 5px solid transparent; border-top: 5px solid var(--teal);
+            pointer-events: none; transition: opacity 0.5s; z-index: 100;
         }
 
-        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; position: relative; }
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; position: relative; z-index: 100; }
         input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: rgba(255,255,255,0.2); border-radius: 2px; }
         input[type=range]::-webkit-slider-thumb { height: 28px; width: 28px; border-radius: 50%; background: white; cursor: pointer; -webkit-appearance: none; margin-top: -12px; box-shadow: 0 0 20px var(--teal); }
 
-        .mck-credit { color: rgba(255, 255, 255, 0.5); font-size: 10px; line-height: 1.6; }
+        .mck-credit { color: rgba(255, 255, 255, 0.6); font-size: 11px; line-height: 1.5; }
     </style>
 </head>
 <body class="p-6">
 
-    <div class="w-full max-w-6xl space-y-6">
-        <div class="flex justify-between items-center px-4">
+    <div class="w-full max-w-5xl space-y-6">
+        <div class="flex justify-between items-end px-4">
             <div class="space-y-1">
                 <h2 class="text-3xl font-black uppercase tracking-tighter">NATIONAL <span class="text-[--teal]">SUPPLY</span> INDEX</h2>
-                <div id="hint" class="text-[10px] font-bold tracking-widest text-[--teal] animate-pulse">DRAG SLIDER TO EXPLORE MARKETS</div>
+                <div class="text-[10px] font-bold tracking-widest text-[--teal] opacity-60">GEOGRAPHIC MARKET INTELLIGENCE</div>
             </div>
             <div class="text-right">
                 <div id="region" class="text-xs font-bold tracking-widest text-[--teal]">PACIFIC NW</div>
@@ -63,7 +58,7 @@
         <div class="bento-stage flex items-center justify-center">
             <canvas id="physicsCanvas" class="absolute inset-0"></canvas>
             <div class="relative z-30 flex flex-col items-center">
-                <div id="cityName" class="kinetic-city text-[9vw] md:text-[110px] text-center">SEATTLE</div>
+                <div id="cityName" class="kinetic-city text-[10vw] md:text-[110px] text-center">SEATTLE</div>
                 <div class="flex items-baseline gap-3 mt-4">
                     <span id="pctVal" class="text-7xl font-light">59</span>
                     <span class="text-xl font-bold opacity-60 uppercase tracking-widest">% Female</span>
@@ -72,14 +67,16 @@
         </div>
 
         <div class="px-4 grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
-            <div class="md:col-span-8 space-y-8">
+            <div class="md:col-span-8 space-y-6">
                 <div class="relative">
                     <div id="tooltip" class="instruction-tag">START HERE</div>
                     <input type="range" id="geoSlider" min="0" max="21" value="0" step="1">
                 </div>
                 <div class="space-y-2">
-                    <p class="text-md font-bold uppercase tracking-tighter">Marketing is <span class="text-[--teal]">structurally female</span>.</p>
-                    <p class="text-[11px] mck-credit max-w-2xl">
+                    <p class="text-sm font-bold uppercase tracking-tighter text-white">
+                        Marketing is <span class="text-[--teal]">structurally female</span>.
+                    </p>
+                    <p class="mck-credit max-w-2xl">
                         The <span class="text-white italic">McKinsey 'Broken Rung' (93:100)</span> mismatch is driving the migration toward Independent work models. Supply exists; the path to promotion is the friction.
                     </p>
                 </div>
@@ -87,7 +84,7 @@
             <div class="md:col-span-4 text-right border-l border-white/10 pl-6">
                 <div class="text-2xl font-bold text-[--teal]">60.2%</div>
                 <div class="text-[10px] uppercase font-bold text-white mb-2">National Average</div>
-                <div class="opacity-30 text-[8px] uppercase tracking-widest leading-loose">Taligence 2026 Intelligence</div>
+                <div class="opacity-30 text-[9px] uppercase tracking-widest">Taligence 2026 • McK/LI Benchmark</div>
             </div>
         </div>
     </div>
@@ -96,10 +93,10 @@
         const cities = [
             { name: "Seattle", val: 59, reg: "Pacific NW" },
             { name: "Portland", val: 61, reg: "Pacific NW" },
-            { name: "San Francisco", val: 59, reg: "Silicon Valley" },
-            { name: "Mt View", val: 48, reg: "Red Zone (Male Tilt)" },
+            { name: "San Fran", val: 59, reg: "Silicon Valley" },
+            { name: "Mt View", val: 48, reg: "Red Zone (Tech Tilt)" },
             { name: "San Jose", val: 54, reg: "Red Zone (Tech Tilt)" },
-            { name: "Los Angeles", val: 57, reg: "West Coast" },
+            { name: "LA", val: 57, reg: "West Coast" },
             { name: "San Diego", val: 58, reg: "SoCal" },
             { name: "Salt Lake", val: 55, reg: "Red Zone (Friction)" },
             { name: "Phoenix", val: 60, reg: "Sun Belt" },
@@ -114,3 +111,83 @@
             { name: "Charlotte", val: 62, reg: "South" },
             { name: "DC", val: 63, reg: "Capital" },
             { name: "Philly", val: 61, reg: "East Coast" },
+            { name: "Boston", val: 64, reg: "New England" },
+            { name: "New York", val: 61, reg: "East Coast" }
+        ];
+
+        const canvas = document.getElementById('physicsCanvas');
+        const ctx = canvas.getContext('2d');
+        const slider = document.getElementById('geoSlider');
+        const tooltip = document.getElementById('tooltip');
+        
+        let width, height, springs = [];
+        const springCount = 40;
+        let targetY, currentY, color = '#00cbcb';
+
+        function init() {
+            width = canvas.parentElement.offsetWidth;
+            height = canvas.parentElement.offsetHeight;
+            canvas.width = width;
+            canvas.height = height;
+            springs = [];
+            for (let i = 0; i <= springCount; i++) {
+                springs.push({ x: (width / springCount) * i, y: height, v: 0 });
+            }
+            targetY = height * (1 - 0.59);
+            currentY = targetY;
+        }
+
+        slider.oninput = function() {
+            tooltip.style.opacity = '0';
+            const data = cities[this.value];
+            document.getElementById('cityName').innerText = data.name;
+            document.getElementById('pctVal').innerText = data.val;
+            document.getElementById('region').innerText = data.reg;
+            
+            targetY = height * (1 - (data.val / 100));
+            color = data.val < 56 ? '#ff4444' : '#00cbcb';
+            document.getElementById('region').style.color = color;
+            
+            // Interaction splash
+            springs.forEach(s => s.v += (Math.random() - 0.5) * 40);
+
+            // Update tooltip position
+            const percent = (this.value - this.min) / (this.max - this.min);
+            tooltip.style.left = `calc(${percent * 100}% - 25px)`;
+        };
+
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+            currentY += (targetY - currentY) * 0.1;
+
+            ctx.beginPath();
+            ctx.moveTo(0, height);
+
+            for (let i = 0; i <= springCount; i++) {
+                const s = springs[i];
+                const accel = -0.04 * (s.y - currentY) - 0.07 * s.v;
+                s.v += accel;
+                s.y += s.v;
+
+                if (i > 0) {
+                    const diff = 0.04 * (s.y - springs[i-1].y);
+                    springs[i-1].v += diff;
+                    s.v -= diff;
+                }
+                ctx.lineTo(s.x, s.y);
+            }
+
+            ctx.lineTo(width, height);
+            ctx.fillStyle = color;
+            ctx.globalAlpha = 0.8;
+            ctx.fill();
+
+            requestAnimationFrame(draw);
+        }
+
+        window.addEventListener('resize', () => { init(); });
+        init();
+        draw();
+    </script>
+</body>
+</html>
