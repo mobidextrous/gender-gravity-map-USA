@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Supply Intelligence | CMO Ladder</title>
+    <title>National Supply Intelligence | CMO Ladder</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;900&family=Instrument+Serif:ital@1&display=swap');
@@ -18,80 +18,67 @@
             overflow: hidden;
             box-shadow: 0 50px 100px rgba(0,0,0,0.9);
             width: 100%;
-            max-width: 950px;
+            max-width: 1000px;
             aspect-ratio: 16/9;
         }
 
         .kinetic-city {
             font-weight: 900; text-transform: uppercase; letter-spacing: -0.06em; line-height: 0.75;
             mix-blend-difference: difference; color: white; z-index: 20; pointer-events: none;
+            white-space: nowrap;
         }
 
-        /* Instructions Glow */
-        .nav-hint {
-            font-size: 10px; font-weight: bold; letter-spacing: 0.3em;
-            color: var(--teal); animation: pulse 2s infinite;
-        }
+        .nav-hint { font-size: 10px; font-weight: bold; letter-spacing: 0.3em; color: var(--teal); animation: pulse 2s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
 
         input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
         input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: rgba(255,255,255,0.2); border-radius: 2px; }
         input[type=range]::-webkit-slider-thumb { height: 28px; width: 28px; border-radius: 50%; background: white; cursor: pointer; -webkit-appearance: none; margin-top: -12px; box-shadow: 0 0 20px var(--teal); }
 
-        /* Brightened Labels */
-        .bright-label { color: rgba(255, 255, 255, 0.9); font-weight: 700; letter-spacing: 0.1em; }
+        .bright-label { color: rgba(255, 255, 255, 0.9); font-weight: 700; }
         .mck-credit { color: rgba(255, 255, 255, 0.5); font-size: 10px; line-height: 1.6; }
     </style>
 </head>
 <body class="p-6">
 
-    <div class="w-full max-w-5xl space-y-8">
-        
+    <div class="w-full max-w-6xl space-y-6">
         <div class="flex justify-between items-center px-4">
             <div class="space-y-1">
-                <h2 class="text-4xl font-black uppercase tracking-tighter">THE US <span class="text-[--teal]">SUPPLY</span> AXIS</h2>
-                <div class="nav-hint uppercase">← Slide to Navigate Markets →</div>
+                <h2 class="text-3xl font-black uppercase tracking-tighter">NATIONAL <span class="text-[--teal]">SUPPLY</span> INDEX</h2>
+                <div class="nav-hint">← SWIPE COAST TO COAST →</div>
             </div>
             <div class="text-right">
                 <div id="region" class="text-xs font-bold tracking-widest text-[--teal]">EAST COAST</div>
-                <div class="text-[10px] opacity-40 uppercase mt-1">Market Segment</div>
+                <div class="text-[9px] opacity-40 uppercase">Taligence Context Engine</div>
             </div>
         </div>
 
         <div class="bento-stage flex items-center justify-center">
             <canvas id="physicsCanvas" class="absolute inset-0"></canvas>
-            
             <div class="relative z-30 flex flex-col items-center">
-                <div id="cityName" class="kinetic-city text-[10vw] md:text-[120px] text-center">NEW YORK</div>
+                <div id="cityName" class="kinetic-city text-[9vw] md:text-[110px] text-center">NEW YORK</div>
                 <div class="flex items-baseline gap-3 mt-4">
                     <span id="pctVal" class="text-7xl font-light">61</span>
-                    <span class="text-xl font-bold opacity-60 uppercase tracking-widest">% Female Share</span>
+                    <span class="text-xl font-bold opacity-60 uppercase tracking-widest">% Female</span>
                 </div>
             </div>
         </div>
 
         <div class="px-4 grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
             <div class="md:col-span-8 space-y-6">
-                <input type="range" id="geoSlider" min="0" max="11" value="11" step="1">
-                
-                <div class="space-y-4">
-                    <p class="text-lg bright-label">
-                        Marketing isn't just "diverse"—it is <span class="text-[--teal]">structurally female</span>.
-                    </p>
-                    <p class="text-sm mck-credit max-w-2xl">
-                        Taligence intelligence reveals a supply-side reality that exceeds traditional management rungs. 
-                        The friction isn't in the talent pool; it's in the promotion path. This 7% mismatch—the <span class="text-white italic">McKinsey 'Broken Rung' (93:100)</span>—is driving the mass migration toward Independent work models.
+                <input type="range" id="geoSlider" min="0" max="21" value="21" step="1">
+                <div class="space-y-2">
+                    <p class="text-md bright-label uppercase tracking-tighter">Marketing is <span class="text-[--teal]">structurally female</span>.</p>
+                    <p class="text-[11px] mck-credit max-w-2xl">
+                        The friction isn't in the talent pool; it's in the promotion path. The <span class="text-white italic">McKinsey 'Broken Rung' (93:100)</span> mismatch is driving the migration toward Independent work models.
                     </p>
                 </div>
             </div>
-
-            <div class="md:col-span-4 text-right space-y-4 border-l border-white/10 pl-6">
-                <div class="space-y-1">
-                    <div class="text-2xl font-bold text-[--teal]">60.2%</div>
-                    <div class="text-[10px] uppercase font-bold opacity-100 text-white">Avg. across top 50 US Hubs</div>
-                </div>
-                <div class="pt-4 opacity-20 text-[9px] uppercase tracking-widest">
-                    Source: Taligence 2026<br>Benchmark: McK/LI Report
+            <div class="md:col-span-4 text-right border-l border-white/10 pl-6">
+                <div class="text-2xl font-bold text-[--teal]">60.2%</div>
+                <div class="text-[10px] uppercase font-bold text-white mb-4">Nat. Avg. Top 50 Hubs</div>
+                <div class="opacity-30 text-[8px] uppercase tracking-widest leading-loose">
+                    Taligence 2026 Intelligence<br>McK/LI Benchmark Analysis
                 </div>
             </div>
         </div>
@@ -99,16 +86,26 @@
 
     <script>
         const cities = [
-            { name: "Seattle", val: 59, reg: "West Coast" },
-            { name: "San Fran", val: 59, reg: "Tech Central" },
-            { name: "Mt View", val: 48, reg: "Red Zone (Male Tilt)" },
+            { name: "Seattle", val: 59, reg: "Pacific NW" },
+            { name: "Portland", val: 61, reg: "Pacific NW" },
+            { name: "San Francisco", val: 59, reg: "Silicon Valley" },
+            { name: "Mt View", val: 48, reg: "Red Zone (Tech Tilt)" },
+            { name: "San Jose", val: 54, reg: "Red Zone (Tech Tilt)" },
             { name: "Los Angeles", val: 57, reg: "West Coast" },
+            { name: "San Diego", val: 58, reg: "SoCal" },
             { name: "Salt Lake", val: 55, reg: "Red Zone (Friction)" },
             { name: "Phoenix", val: 60, reg: "Sun Belt" },
-            { name: "Austin", val: 59, reg: "Central" },
-            { name: "Dallas", val: 61, reg: "Central" },
+            { name: "Tempe", val: 63, reg: "Growth Outlier" },
+            { name: "Denver", val: 59, reg: "Mountain" },
+            { name: "Austin", val: 59, reg: "Central Tech" },
+            { name: "Dallas", val: 61, reg: "Central Hub" },
             { name: "Chicago", val: 60, reg: "Midwest" },
-            { name: "Miami", val: 58, reg: "South East" },
+            { name: "Minneapolis", val: 62, reg: "Midwest" },
+            { name: "Atlanta", val: 59, reg: "South" },
+            { name: "Miami", val: 58, reg: "Florida" },
+            { name: "Charlotte", val: 62, reg: "South" },
+            { name: "DC", val: 63, reg: "Capital" },
+            { name: "Philly", val: 61, reg: "East Coast" },
             { name: "Boston", val: 64, reg: "New England" },
             { name: "New York", val: 61, reg: "East Coast" }
         ];
@@ -116,8 +113,8 @@
         const canvas = document.getElementById('physicsCanvas');
         const ctx = canvas.getContext('2d');
         const slider = document.getElementById('geoSlider');
-        let width, height, springs = [];
-        const springCount = 45;
+        let width, height, springs = [], bubbles = [];
+        const springCount = 50;
         let targetY, currentY, color = '#00cbcb';
 
         function init() {
@@ -125,38 +122,4 @@
             height = canvas.parentElement.offsetHeight;
             canvas.width = width; canvas.height = height;
             springs = [];
-            for (let i = 0; i <= springCount; i++) springs.push({ x: (width/springCount)*i, y: height, v: 0 });
-            targetY = height * (1 - 0.61); currentY = targetY;
-        }
-
-        slider.oninput = function() {
-            const data = cities[this.value];
-            document.getElementById('cityName').innerText = data.name;
-            document.getElementById('pctVal').innerText = data.val;
-            document.getElementById('region').innerText = data.reg;
-            targetY = height * (1 - (data.val / 100));
-            color = data.val < 56 ? '#ff4444' : '#00cbcb';
-            document.getElementById('region').style.color = color;
-            springs.forEach(s => s.v += (Math.random() - 0.5) * 50);
-        };
-
-        function draw() {
-            ctx.clearRect(0, 0, width, height);
-            currentY += (targetY - currentY) * 0.1;
-            ctx.beginPath(); ctx.moveTo(0, height);
-            for (let i = 0; i <= springCount; i++) {
-                const s = springs[i];
-                const accel = -0.04 * (s.y - currentY) - 0.06 * s.v;
-                s.v += accel; s.y += s.v;
-                if (i > 0) { const diff = 0.04 * (s.y - springs[i-1].y); springs[i-1].v += diff; s.v -= diff; }
-                ctx.lineTo(s.x, s.y);
-            }
-            ctx.lineTo(width, height); ctx.fillStyle = color; ctx.globalAlpha = 0.8; ctx.fill();
-            requestAnimationFrame(draw);
-        }
-
-        window.addEventListener('resize', init);
-        init(); draw();
-    </script>
-</body>
-</html>
+            for (let i = 0; i <= springCount; i++) springs.
