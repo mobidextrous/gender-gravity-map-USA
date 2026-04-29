@@ -2,89 +2,155 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Gender Intelligence | CMO Ladder</title>
+    <title>Supply Intelligence | CMO Ladder</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Playfair+Display:ital@1&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&family=Instrument+Serif:ital@1&display=swap');
         
-        body { background: #050505; color: white; font-family: 'Inter', sans-serif; }
-        
-        .liquid-container {
-            position: relative;
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            border: 2px solid rgba(255,255,255,0.1);
-            overflow: hidden;
-            background: #111;
+        :root {
+            --brand-teal: #00cbcb;
+            --brand-orange: #ff5f1f;
+            --bg-dark: #080808;
         }
 
-        .liquid {
+        body { 
+            background: var(--bg-dark); 
+            color: white; 
+            font-family: 'Space Grotesk', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .serif-italic { font-family: 'Instrument Serif', serif; font-style: italic; }
+
+        .glass-sphere {
+            position: relative;
+            width: 340px;
+            height: 340px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.8);
+            overflow: hidden;
+            backdrop-filter: blur(8px);
+        }
+
+        .liquid-fill {
             position: absolute;
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 60%; /* This is our 60% Female Stat */
-            background: linear-gradient(45deg, #00cbcb, #008080);
-            transition: height 2s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+            height: 60.2%;
+            background: linear-gradient(180deg, var(--brand-teal) 0%, #005555 100%);
+            transition: height 1.8s cubic-bezier(0.65, 0, 0.35, 1);
         }
 
         .wave {
             position: absolute;
-            top: -20px;
+            top: -15px;
             left: 0;
             width: 200%;
-            height: 40px;
+            height: 30px;
             background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 20" xmlns="http://www.w3.org/2000/svg"><path d="M0 10 Q 25 20 50 10 T 100 10 V 20 H 0 Z" fill="%2300cbcb"/></svg>');
             background-size: 50% 100%;
-            animation: move-wave 3s linear infinite;
+            animation: flow 3s linear infinite;
         }
 
-        @keyframes move-wave {
+        @keyframes flow {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
         }
 
-        .stat-overlay {
+        .accent-dot {
             position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            top: 15%;
+            right: 8%;
+            width: 14px;
+            height: 14px;
+            background: var(--brand-orange);
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--brand-orange);
+            z-index: 20;
+        }
+
+        .header-caps {
+            text-transform: uppercase;
+            letter-spacing: -0.04em;
+            line-height: 0.85;
+        }
+
+        .sub-label {
+            color: rgba(255, 255, 255, 0.7); /* Brightened for readability */
+            font-size: 11px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        .credit-line {
+            color: rgba(255, 255, 255, 0.15); /* Quietly credited */
+            font-size: 9px;
+            letter-spacing: 0.05em;
         }
     </style>
 </head>
-<body class="flex flex-col items-center justify-center min-h-screen p-10">
+<body class="flex flex-col items-center justify-center min-h-screen p-6">
 
-    <div class="max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+    <div class="max-w-5xl w-full grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
         
-        <div class="flex flex-col items-center">
-            <div class="liquid-container mb-6">
-                <div class="liquid">
+        <div class="flex flex-col items-center relative">
+            <div class="accent-dot"></div>
+            <div class="glass-sphere mb-8">
+                <div class="liquid-fill" id="liquid">
                     <div class="wave"></div>
                 </div>
-                <div class="stat-overlay">
-                    <span class="text-6xl font-black">60.2%</span>
-                    <span class="uppercase tracking-[0.3em] text-xs opacity-70">Female Majority</span>
+                <div class="absolute inset-0 flex flex-col items-center justify-center z-10">
+                    <span class="text-7xl font-bold tracking-tighter" id="percentText">60.2%</span>
                 </div>
             </div>
-            <p class="text-[10px] uppercase tracking-widest opacity-30">Avg. across top 50 US Marketing Hubs</p>
+            <div class="sub-label font-bold text-center">Avg. across top 50 US Marketing Hubs</div>
         </div>
 
-        <div class="space-y-6">
-            <h2 class="text-4xl font-black tracking-tighter uppercase leading-none">
-                The <span class="text-[#00cbcb]">Gender</span> <br> Gravity.
-            </h2>
-            <p class="text-xl text-gray-400">
-                Marketing isn't just "diverse"—it is <span class="serif-italic text-white">structurally female</span>. 
-            </p>
-            <div class="space-y-4 border-l-2 border-[#00cbcb] pl-6 py-2">
-                <p class="text-sm">
-                    <strong class="text-white">The "Broken Rung" Risk:</strong> 
-                    While 60% of the talent supply is female, only 93 women are promoted to manager for every 100 men in 2026.
+        <div class="space-y-10">
+            <div class="space-y-6">
+                <h1 class="text-6xl font-bold header-caps text-white">
+                    THE MARKETING <br>TALENT POOL IN <br>THE US IS <br>
+                    <span class="text-[--brand-teal]">STRUCTURALLY <br>FEMALE.</span>
+                </h1>
+                <p class="text-xl text-gray-400 max-w-md">
+                    Taligence intelligence reveals a market equilibrium where <span class="serif-italic text-white">Supply is not the problem</span>—friction within the hierarchy is.
                 </p>
-                <p class="text-sm italic text-gray-500">
-                    "This 7% friction gap is the primary driver of the shift toward Independent and Enabled work models."
+            </div>
+
+            <div class="grid grid-cols-2 gap-8 border-t border-white/10 pt-8">
+                <div>
+                    <span class="block text-[--brand-orange] font-bold text-3xl">+3.4%</span>
+                    <span class="text-[10px] uppercase tracking-widest opacity-40">Growth Outlier (Tempe)</span>
+                </div>
+                <div>
+                    <span class="block text-white font-bold text-3xl">93:100</span>
+                    <span class="text-[10px] uppercase tracking-widest opacity-40">The "Broken Rung" Gap</span>
+                </div>
+            </div>
+
+            <div class="flex gap-3">
+                <button onclick="updateData(61.0)" class="px-6 py-2 border border-white/20 text-[10px] uppercase tracking-widest hover:bg-white hover:text-black transition-all">NYC</button>
+                <button onclick="updateData(57.0)" class="px-6 py-2 border border-white/20 text-[10px] uppercase tracking-widest hover:bg-white hover:text-black transition-all">LA</button>
+                <button onclick="updateData(60.2)" class="px-6 py-2 border border-[--brand-teal] text-[--brand-teal] text-[10px] uppercase tracking-widest">Global</button>
+            </div>
+            
+            <div class="credit-line pt-4 italic">
+                Sources: Taligence Proprietary Data (2024-2026); Benchmarked against McK/LI Women in the Workplace.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateData(val) {
+            const liquid = document.getElementById('liquid');
+            const text = document.getElementById('percentText');
+            liquid.style.height = val + '%';
+            text.innerText = val + '%';
+        }
+    </script>
+
+</body>
+</html>
