@@ -2,32 +2,29 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Market Tension | CMO Ladder</title>
+    <title>Fluid Intelligence | CMO Ladder</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&family=Instrument+Serif:ital@1&display=swap');
         :root { --brand-teal: #00cbcb; --brand-red: #ff4444; --bg-dark: #080808; }
-        body { background: var(--bg-dark); color: white; font-family: 'Space Grotesk', sans-serif; }
+        body { background: var(--bg-dark); color: white; font-family: 'Space Grotesk', sans-serif; overflow: hidden; }
         .serif-italic { font-family: 'Instrument Serif', serif; font-style: italic; }
         
-        .glass-sphere {
-            position: relative; width: 340px; height: 340px; border-radius: 50%;
-            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.8); overflow: hidden; backdrop-filter: blur(8px);
+        canvas {
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.9);
+            cursor: pointer;
         }
-        .liquid-fill {
-            position: absolute; bottom: 0; left: 0; width: 100%; height: 61%;
-            background: var(--brand-teal); transition: all 1.2s cubic-bezier(0.65, 0, 0.35, 1);
-        }
-        .red-state { background: linear-gradient(180deg, #ff4444 0%, #660000 100%) !important; }
-        
+
         .city-btn {
             width: 100%; text-align: left; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05);
             font-size: 10px; letter-spacing: 0.1em; opacity: 0.5; transition: 0.3s;
         }
         .city-btn:hover { opacity: 1; color: var(--brand-teal); }
         .active-city { opacity: 1; border-left: 2px solid white; background: rgba(255,255,255,0.05); }
-        .danger-text { color: var(--brand-red) !important; }
+        .header-caps { text-transform: uppercase; letter-spacing: -0.04em; line-height: 0.85; }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-6">
@@ -35,86 +32,77 @@
     <div class="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
         
         <div class="lg:col-span-3 border-r border-white/10 pr-8">
-            <h3 class="text-[10px] uppercase tracking-widest opacity-40 mb-6 font-bold">Market Archetypes</h3>
+            <h3 class="text-[10px] uppercase tracking-widest opacity-40 mb-6 font-bold italic">Da Vinci Physics Engine</h3>
             <div id="cityList" class="space-y-1">
                 <p class="text-[9px] opacity-30 mb-2 uppercase">The 60% Equilibrium</p>
-                <button onclick="update(61, 'NEW YORK', false)" class="city-btn active-city">NEW YORK</button>
-                <button onclick="update(61, 'DALLAS', false)" class="city-btn">DALLAS</button>
-                <button onclick="update(64, 'BOSTON', false)" class="city-btn">BOSTON</button>
+                <button onclick="updateData(61, 'NEW YORK', false)" class="city-btn active-city">NEW YORK</button>
+                <button onclick="updateData(64, 'BOSTON', false)" class="city-btn">BOSTON</button>
+                <button onclick="updateData(61, 'DALLAS', false)" class="city-btn">DALLAS</button>
                 
-                <p class="text-[9px] opacity-30 mt-6 mb-2 uppercase text-red-500">The Red Zones (Male Tilt)</p>
-                <button onclick="update(48, 'MOUNTAIN VIEW', true)" class="city-btn hover:text-red-500">MOUNTAIN VIEW (48%)</button>
-                <button onclick="update(51, 'BEVERLY HILLS', true)" class="city-btn hover:text-red-500">BEVERLY HILLS (51%)</button>
-                <button onclick="update(54, 'SAN JOSE', true)" class="city-btn hover:text-red-500">SAN JOSE (54%)</button>
+                <p class="text-[9px] opacity-30 mt-6 mb-2 uppercase text-red-500">The Red Zones</p>
+                <button onclick="updateData(48, 'MOUNTAIN VIEW', true)" class="city-btn hover:text-red-500">MOUNTAIN VIEW</button>
+                <button onclick="updateData(51, 'BEVERLY HILLS', true)" class="city-btn hover:text-red-500">BEVERLY HILLS</button>
             </div>
         </div>
 
-        <div class="lg:col-span-5 flex flex-col items-center">
-            <div class="glass-sphere mb-8">
-                <div class="liquid-fill" id="liquid"></div>
-                <div class="absolute inset-0 flex flex-col items-center justify-center z-10">
-                    <span class="text-8xl font-bold tracking-tighter" id="pct">61%</span>
-                    <span class="text-[10px] uppercase tracking-[0.4em] opacity-40 mt-4 font-bold" id="cityLabel">NEW YORK</span>
-                </div>
+        <div class="lg:col-span-5 flex flex-col items-center relative">
+            <canvas id="fluidCanvas" width="360" height="360"></canvas>
+            <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                <span class="text-8xl font-bold tracking-tighter" id="pct">61%</span>
+                <span class="text-[10px] uppercase tracking-[0.4em] opacity-40 mt-4 font-bold" id="cityLabel">NEW YORK</span>
             </div>
-            <div class="text-[11px] font-bold opacity-70 tracking-widest uppercase" id="statusLabel">Structural Majority</div>
         </div>
 
         <div class="lg:col-span-4 space-y-10">
             <h1 class="text-6xl font-bold uppercase tracking-tighter leading-[0.85]">
-                BEYOND <br>THE <span id="titleColor" class="text-[--brand-teal]">TEAL.</span>
+                KINETIC <br><span id="titleColor" class="text-[--brand-teal]">SUPPLY.</span>
             </h1>
             <p class="text-lg text-gray-400">
-                While marketing is structurally female, <span class="serif-italic text-white">Red Zone</span> markets reveal where the technical or industrial "gravity" of a city overrides the functional norm.
+                Data is never static. We've animated the talent pool as a <span class="serif-italic text-white">living fluid</span> to reflect the constant churn and slosh of the 2026 market.
             </p>
 
-            <div class="space-y-4 border-t border-white/10 pt-8">
-                <div class="flex justify-between items-center">
-                    <span class="text-[10px] uppercase opacity-40">Mck Broken Rung</span>
-                    <span class="font-bold">93:100</span>
-                </div>
-                <p id="insightText" class="text-xs text-gray-500 italic">
-                    "Standard markets reflect the national female majority."
-                </p>
-            </div>
-            
-            <div class="text-[9px] uppercase tracking-widest opacity-20">
-                Taligence Intelligence Report 2026
+            <div class="space-y-4 border-t border-white/10 pt-8 text-[9px] uppercase tracking-widest opacity-20">
+                Benchmarked Intelligence: McK / Taligence <br>
+                Render Mode: Procedural Physics
             </div>
         </div>
     </div>
 
     <script>
-        function update(val, name, isRed) {
-            const liq = document.getElementById('liquid');
-            const pct = document.getElementById('pct');
-            const lbl = document.getElementById('cityLabel');
-            const title = document.getElementById('titleColor');
-            const stat = document.getElementById('statusLabel');
-            const ins = document.getElementById('insightText');
+        const canvas = document.getElementById('fluidCanvas');
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width;
+        let height = canvas.height;
 
-            liq.style.height = val + '%';
-            pct.innerText = val + '%';
-            lbl.innerText = name;
+        let targetPercent = 0.61;
+        let currentPercent = 0.61;
+        let color = '#00cbcb';
+        let points = [];
+        let totalPoints = 40;
+        let gap = width / (totalPoints - 1);
 
-            if(isRed) {
-                liq.classList.add('red-state');
-                title.classList.add('danger-text');
-                title.innerText = "RED.";
-                stat.innerText = "Male Tilt / Tech Bleed";
-                ins.innerText = '"' + name + ' represents a departure from the 60% norm, where technical or legacy industry demographics override functional trends."';
-            } else {
-                liq.classList.remove('red-state');
-                title.classList.remove('danger-text');
-                title.innerText = "TEAL.";
-                stat.innerText = "Structural Majority";
-                ins.innerText = '"Standard high-volume hubs continue to reflect the structural female majority."';
-            }
+        // Initialize points
+        for (let i = 0; i < totalPoints; i++) {
+            points.push({ x: i * gap, y: height, py: height, vy: 0 });
+        }
+
+        function updateData(val, name, isRed) {
+            targetPercent = val / 100;
+            document.getElementById('pct').innerText = val + '%';
+            document.getElementById('cityLabel').innerText = name;
+            color = isRed ? '#ff4444' : '#00cbcb';
+            document.getElementById('titleColor').style.color = color;
+            
+            // Add a "splash" when changing
+            points[Math.floor(Math.random() * totalPoints)].vy = -20;
             
             const btns = document.querySelectorAll('.city-btn');
             btns.forEach(b => b.classList.remove('active-city'));
             event.target.classList.add('active-city');
         }
-    </script>
-</body>
-</html>
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            
+            // Smoothly move towards target level
+            currentPercent += (targetPercent - currentPercent
